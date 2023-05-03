@@ -4,7 +4,7 @@ import time
 import matplotlib.pyplot as plt
 
 
-# abcxyt
+# abcxyt akjfhuisd
 # pos = low + [(x - arr[low]) * (high - low) / (arr[high] - arr[low])]
 # O(log(log(n)))
 def interpolation_search(arr, x):   
