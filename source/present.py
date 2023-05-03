@@ -3,50 +3,9 @@ import random
 import time
 import matplotlib.pyplot as plt
 
-
-# abcxyt akjfhuisd
 # pos = low + [(x - arr[low]) * (high - low) / (arr[high] - arr[low])]
 # O(log(log(n)))
 
-def interpolation_search(arr, x):   
-    low = 0
-    high = len(arr) - 1
-    
-    while low <= high and x >= arr[low] and x <= arr[high]:
-        pos = low + int((float(high - low) / (arr[high] - arr[low])) * (x - arr[low]))
-        
-        if arr[pos] == x:
-            return pos
-        
-        if arr[pos] < x:
-            low = pos + 1
-        else:
-            high = pos - 1
-    return -1 # Element not found
-
-def jump_search(arr, x):
-    n = len(arr)
-    step = int(math.sqrt(n))
-    prev = 0
-    
-    # Jumping through the array
-    while arr[min(step, n)-1] < x:
-        prev = step
-        step += int(math.sqrt(n))
-        if prev >= n:
-            return -1
-    
-    # Linear search within the block
-    while arr[prev] < x:
-        prev += 1
-        if prev == min(step, n):
-            return -1
-    
-    # If element is found, return its index
-    if arr[prev] == x:
-        return prev
-    else:
-        return -1
 def binay_search(arr,target) :
     #base case : if arr is empty
     if (len(arr) == 0) :
@@ -64,7 +23,55 @@ def binay_search(arr,target) :
         return binay_search(left, target)
     
     return binay_search(right, target)
+
+
+def interpolation_search(arr, target):
+    low = 0
+    high = len(arr) - 1
     
+    if low > high or target < arr[low] or target > arr[high]:
+        return -1 
+    
+    #select pivot
+    pivot_pos = low + int((float(high - low) / (arr[high] - arr[low])) * (target - arr[low]))
+    
+    if arr[pivot_pos] == target:
+        return pivot_pos
+    
+    if arr[pivot_pos] < target:
+        return interpolation_search(arr, target, pivot_pos+1, high)
+    
+    return interpolation_search(arr, target, low, pivot_pos-1)
+
+def jump_search(arr, target) :
+    low = 0
+    high = len(arr) - 1
+    if low > high :
+        return -1
+    step = int(math.sqrt(len(arr)))
+    prev = low
+    
+    # Jumping through the array
+    while arr[min(step, high)-1] < target:
+        prev = step
+        step += int(math.sqrt(high-low))
+        if prev >= high:
+            return -1
+    
+    # Linear search within the block
+    while arr[prev] < target:
+        prev += 1
+        if prev == min(step, high):
+            return -1
+    
+    # If element is found, return its index
+    if arr[prev] == target:
+        return prev
+    
+    if arr[prev] > target:
+        return jump_search(arr, target, low, prev-1)
+    
+    return jump_search(arr, target, prev+1, high)
     
 def createData():
     for i in range(1, 6):    
