@@ -67,35 +67,7 @@ def jump_search(arr, target) :
     
     return jump_search(arr, target, prev+1, high)
 
-def visualize_binary_search(arr, target):
-    fig, ax = plt.subplots()
-    ax.set_xlim(0, len(arr)-1)
-    ax.set_ylim(0, max(arr)+1)
-    
-    low = 0
-    high = len(arr) - 1
-    
-    while low <= high:
-        mid = (low + high) // 2
-        
-        ax.plot([mid, mid], [0, max(arr)], 'g--')
-        ax.plot([low, high], [arr[mid], arr[mid]], 'r-')
-        ax.plot(mid, arr[mid], 'bo')
-        
-        if arr[mid] == target:
-            ax.plot(mid, arr[mid], 'go', markersize=10)
-            return mid
-        elif arr[mid] < target:
-            low = mid + 1
-        else:
-            high = mid - 1
-            
-        plt.pause(1)
-        
-    ax.plot(mid, arr[mid], 'ro', markersize=10)
-    plt.pause(1)
-    
-    return -1
+
 
 def main() :
     arr = [1,2,3,4,5,6]
