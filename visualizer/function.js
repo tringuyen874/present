@@ -30,46 +30,8 @@ var heightScale = d3
 createChart(data);
 
 const SearchAlgo = {
-    // liearSearch() {
-    //     // promise for async bubble sort with delay
-    //     const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-    //     // async function for bubble sort
-    //     async function search() {
-    //         for (let i = 0; i < data.length - 1; i++) {
-    //             // If user click on stop button then this function will stop performing here.
-
-    //             // changing initial smallest bar color
-    //             await timer(time);
-    //             changeBarColor(data[i], traverseColor);
-    //             // console.log(data[i]);
-    //             await timer(time);
-    //             // console.log("Searching");
-
-    //             if (data[i] == target) {
-    //                 changeBarColor(data[i], sortedColor);
-    //                 // console.log("found");
-    //                 await timer(time);
-    //                 break;
-    //             }
-    //         }
-
-    //         // after complete sorting complete making all the bar green and playing complete sound effects
-
-    //         // completeAudio.play();
-    //         isSorting = false;
-    //         isFound = true;
-    //     }
-
-    //     // calling async function here
-    //     search(this);
-    // },
-
     binarySearch() {
-        // promise for async bubble sort with delay
-
         const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-        // async function for bubble sort
-
         async function search(self) {
             console.log(target);
             let l = 0,
@@ -77,7 +39,7 @@ const SearchAlgo = {
                 mid;
             while (l <= r) {
                 // If user click on stop button then this function will stop performing here.
-                mid = (l + r) / 2;
+                mid = (l + r) / 2 || 0;
                 await timer(time);
                 changeBarColor(data[mid], traverseColor);
                 if (data[mid] == target) {
@@ -101,12 +63,48 @@ const SearchAlgo = {
                     target + " doesn't exist.";
             }
 
-            // after complete sorting complete making all the bar green and playing complete sound effects
-
-            completeAudio.play();
+            // after complete sorting complete making all the bar green 
             isSorting = false;
         }
 
+        // calling async function here
+        search(this);
+    },
+    interpolationSearch() {
+        const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+        async function search(self) {
+            let low = 0;
+            let high = data.length - 1;
+            let pos;
+            while (low <= high && target >= data[low] && target <= data[high]) {
+                pos = Math.floor(
+                    low + ((target - data[low]) * (high - low)) / (data[high] - data[low])
+                ) || 0;
+                await timer(time);
+                changeBarColor(data[pos], traverseColor);
+                if (data[pos] === target) {
+                    changeBarColor(data[pos], sortedColor);
+                    isFound = true;
+                    let text = target + " Found at position " + (pos + 1);
+                    document.getElementById("foundNotice").innerHTML = text;
+                    await timer(time);
+                    break;
+                }
+                if (data[pos] < target) {
+                    low = pos + 1;
+                } else {
+                    high = pos - 1;
+                }
+                await timer(time);
+            }
+            if (!isFound) {
+                document.getElementById("foundNotice").innerHTML =
+                    target + " doesn't exist.";
+            }
+
+            // after complete sorting complete making all the bar green 
+            isSorting = false;
+        }
         // calling async function here
         search(this);
     },
@@ -114,18 +112,15 @@ const SearchAlgo = {
 
 function startSearching() {
     let algo = document.getElementById("get-algo").value;
-    if (algo == "linear-search") {
-        const linearSearchStarted = SearchAlgo.liearSearch.bind(SearchAlgo);
-        linearSearchStarted();
+    if (algo == "interpolation-search") {
+        const interpolationSearchStarted = SearchAlgo.interpolationSearch.bind(SearchAlgo);
+        interpolationSearchStarted();
     }
     if (algo == "binary-search") {
         const binarySearchStarted = SearchAlgo.binarySearch.bind(SearchAlgo);
         binarySearchStarted();
     }
-    if (algo == "merge-sort") {
-        const mergeSortStarted = SortAlgo.mergeSort.bind(SortAlgo);
-        mergeSortStarted();
-    }
+
 }
 
 document.getElementById("search").addEventListener("click", function() {
