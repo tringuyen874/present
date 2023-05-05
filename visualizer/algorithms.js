@@ -11,8 +11,7 @@ var svg,
     unsortedColor = "#add8e6",
     sortedColor = "green",
     isSorting = false,
-    isFound = false;
-
+    isFound = false
 
 // generating random data
 var data = randomData(maxElement, dataRange);
@@ -32,14 +31,13 @@ createChart(data);
 const SearchAlgo = {
     binarySearch() {
         const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-        async function search(self) {
-            console.log(target);
-            let l = 0,
-                r = data.length - 1,
+        async function search() {
+            let left = 0,
+                right = data.length - 1,
                 mid;
-            while (l <= r) {
-                // If user click on stop button then this function will stop performing here.
-                mid = (l + r) / 2 || 0;
+            while (left <= right) {
+                // If user click on stop button then this function will stop 
+                mid = (left + right) / 2 || 0;
                 await timer(time);
                 changeBarColor(data[mid], traverseColor);
                 if (data[mid] == target) {
@@ -50,12 +48,11 @@ const SearchAlgo = {
                     await timer(time);
                     break;
                 } else if (data[mid] < target) {
-                    l = mid + 1;
+                    left = mid + 1;
                 } else {
-                    r = mid - 1;
+                    right = mid - 1;
                 }
                 // changing initial smallest bar color
-
                 await timer(time);
             }
             if (!isFound) {
@@ -72,7 +69,7 @@ const SearchAlgo = {
     },
     interpolationSearch() {
         const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-        async function search(self) {
+        async function search() {
             let low = 0;
             let high = data.length - 1;
             let pos;
@@ -101,13 +98,48 @@ const SearchAlgo = {
                 document.getElementById("foundNotice").innerHTML =
                     target + " doesn't exist.";
             }
-
             // after complete sorting complete making all the bar green 
             isSorting = false;
         }
         // calling async function here
         search(this);
     },
+    jumpSearch() {
+        const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+        async function search() {
+            const n = data.length;
+            const step = Math.floor(Math.sqrt(n));
+            let prev = 0;
+            let current = step;
+            // Finding the block where the element is present
+            while (current < n && data[current] < target) {
+                changeBarColor(data[prev], traverseColor);
+                changeBarColor(data[current], traverseColor);
+                prev = current;
+                current += step;
+                await timer(time);
+            }
+            // Linear search within the block
+            while (prev < Math.min(current, n)) {
+                if (data[prev] === target) {
+                    changeBarColor(data[prev], sortedColor);
+                    isFound = true;
+                    let text = target + " Found at position " + (prev + 1);
+                    document.getElementById("foundNotice").innerHTML = text;
+                    await timer(time);
+                    break;
+                }
+                prev++;
+            }
+            if (!isFound) {
+                document.getElementById("foundNotice").innerHTML =
+                    target + " doesn't exist.";
+            }
+            // after complete sorting complete making all the bar green 
+            isSorting = false;
+        }
+        search(this);
+    }
 };
 
 function startSearching() {
@@ -119,6 +151,10 @@ function startSearching() {
     if (algo == "binary-search") {
         const binarySearchStarted = SearchAlgo.binarySearch.bind(SearchAlgo);
         binarySearchStarted();
+    }
+    if (algo == "jump-search") {
+        const jumpSearchStarted = SearchAlgo.jumpSearch.bind(SearchAlgo);
+        jumpSearchStarted();
     }
 
 }
