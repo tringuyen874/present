@@ -30,39 +30,39 @@ var heightScale = d3
 createChart(data);
 
 const SearchAlgo = {
-    liearSearch() {
-        // promise for async bubble sort with delay
-        const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-        // async function for bubble sort
-        async function search() {
-            for (let i = 0; i < data.length - 1; i++) {
-                // If user click on stop button then this function will stop performing here.
+    // liearSearch() {
+    //     // promise for async bubble sort with delay
+    //     const timer = (ms) => new Promise((res) => setTimeout(res, ms));
+    //     // async function for bubble sort
+    //     async function search() {
+    //         for (let i = 0; i < data.length - 1; i++) {
+    //             // If user click on stop button then this function will stop performing here.
 
-                // changing initial smallest bar color
-                await timer(time);
-                changeBarColor(data[i], traverseColor);
-                // console.log(data[i]);
-                await timer(time);
-                // console.log("Searching");
+    //             // changing initial smallest bar color
+    //             await timer(time);
+    //             changeBarColor(data[i], traverseColor);
+    //             // console.log(data[i]);
+    //             await timer(time);
+    //             // console.log("Searching");
 
-                if (data[i] == target) {
-                    changeBarColor(data[i], sortedColor);
-                    // console.log("found");
-                    await timer(time);
-                    break;
-                }
-            }
+    //             if (data[i] == target) {
+    //                 changeBarColor(data[i], sortedColor);
+    //                 // console.log("found");
+    //                 await timer(time);
+    //                 break;
+    //             }
+    //         }
 
-            // after complete sorting complete making all the bar green and playing complete sound effects
+    //         // after complete sorting complete making all the bar green and playing complete sound effects
 
-            // completeAudio.play();
-            isSorting = false;
-            isFound = true;
-        }
+    //         // completeAudio.play();
+    //         isSorting = false;
+    //         isFound = true;
+    //     }
 
-        // calling async function here
-        search(this);
-    },
+    //     // calling async function here
+    //     search(this);
+    // },
 
     binarySearch() {
         // promise for async bubble sort with delay
