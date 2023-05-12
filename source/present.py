@@ -160,4 +160,3 @@ main()
 
 
 
-print("Interpolation search")
