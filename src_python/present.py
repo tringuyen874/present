@@ -89,6 +89,11 @@ def ternary_search(arr,target) :
         return ternary_search(arr, target, middle_2 + 1, right)
     return ternary_search(arr, target, middle_1 - 1, middle_2 + 1)
     
+    
+    
+    
+    
+    
 def createData():
     for i in range(1, 6):    
         length = 200000000 * i
