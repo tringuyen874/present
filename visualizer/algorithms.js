@@ -2,7 +2,7 @@ var svg,
     bandScale,
     text,
     maxElement = 15,
-    dataRange = maxElement * 3,
+    dataRange = 1000,
     areaHeight = 250,
     areaWidth = 800,
     time = 300,
@@ -32,9 +32,9 @@ const SearchAlgo = {
     binarySearch() {
         const timer = (ms) => new Promise((res) => setTimeout(res, ms));
         async function search() {
-            let left = 0,
-                right = data.length - 1,
-                mid;
+            let left = 0;
+            let right = data.length - 1;
+            let mid;
             while (left <= right) {
                 // If user click on stop button then this function will stop 
                 mid = (left + right) / 2 || 0;
@@ -46,7 +46,7 @@ const SearchAlgo = {
                     let text = target + " Found at position " + (mid + 1);
                     document.getElementById("foundNotice").innerHTML = text;
                     await timer(time);
-                    break;
+                    return target;
                 } else if (data[mid] < target) {
                     left = mid + 1;
                 } else {
@@ -85,7 +85,7 @@ const SearchAlgo = {
                     let text = target + " Found at position " + (pos + 1);
                     document.getElementById("foundNotice").innerHTML = text;
                     await timer(time);
-                    break;
+                    return target;
                 }
                 if (data[pos] < target) {
                     low = pos + 1;
@@ -127,7 +127,7 @@ const SearchAlgo = {
                     let text = target + " Found at position " + (prev + 1);
                     document.getElementById("foundNotice").innerHTML = text;
                     await timer(time);
-                    break;
+                    return target;
                 }
                 prev++;
             }
