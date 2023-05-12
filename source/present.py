@@ -160,3 +160,4 @@ main()
 
 
 
+print("Interpolation search")
