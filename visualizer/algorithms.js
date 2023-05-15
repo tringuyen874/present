@@ -7,8 +7,6 @@ var svg,
     areaWidth = 800,
     time = 300,
     traverseColor = "#ffcaa1",
-    smallestColor = "#ab87ff",
-    unsortedColor = "#add8e6",
     sortedColor = "green",
     isSorting = false,
     isFound = false
@@ -225,3 +223,7 @@ document.getElementById("random-data").addEventListener("click", function() {
     var data = randomData(maxElement, dataRange);
     createChart(data);
 });
+document.getElementById("reset").addEventListener("click", function() {
+    svg.remove();
+    createChart(data)
+})

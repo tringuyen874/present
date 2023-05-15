@@ -11,7 +11,7 @@ def interpolation_search_all(arr, x):
     lo = 0
     hi = len(arr) - 1
     result = []
-
+    
     while lo <= hi and x >= arr[lo]["Name"] and x <= arr[hi]["Name"]:
         pos = lo + int(((float(hi - lo) / (ord(arr[hi]["Name"][0]) - ord(arr[lo]["Name"][0]))) * (ord(x[0]) - ord(arr[lo]["Name"][0]))))
 
