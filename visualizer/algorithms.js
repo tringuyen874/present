@@ -117,14 +117,13 @@ const SearchAlgo = {
                 current += step;
                 await timer(time);
             }
-            while (prev < Math.min(current, n)) {
+            while (prev <= Math.min(current, n)) {
                 if (data[prev] === target) {
                     changeBarColor(data[prev], sortedColor);
                     isFound = true;
                     let text = target + " Found at position " + (prev + 1);
                     document.getElementById("foundNotice").innerHTML = text;
                     await timer(time);
-                    return target;
                 }
                 prev++;
             }
