@@ -117,7 +117,6 @@ const SearchAlgo = {
                 current += step;
                 await timer(time);
             }
-            // Linear search within the block
             while (prev < Math.min(current, n)) {
                 if (data[prev] === target) {
                     changeBarColor(data[prev], sortedColor);
