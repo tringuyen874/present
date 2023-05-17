@@ -7,8 +7,6 @@ var svg,
     areaWidth = 800,
     time = 300,
     traverseColor = "#ffcaa1",
-    smallestColor = "#ab87ff",
-    unsortedColor = "#add8e6",
     sortedColor = "green",
     isSorting = false,
     isFound = false
@@ -119,15 +117,13 @@ const SearchAlgo = {
                 current += step;
                 await timer(time);
             }
-            // Linear search within the block
-            while (prev < Math.min(current, n)) {
+            while (prev <= Math.min(current, n)) {
                 if (data[prev] === target) {
                     changeBarColor(data[prev], sortedColor);
                     isFound = true;
                     let text = target + " Found at position " + (prev + 1);
                     document.getElementById("foundNotice").innerHTML = text;
                     await timer(time);
-                    return target;
                 }
                 prev++;
             }
@@ -140,53 +136,7 @@ const SearchAlgo = {
         }
         search(this);
     },
-    ternarySearch() {
-        const timer = (ms) => new Promise((res) => setTimeout(res, ms));
-        async function search() {
-            let left = 0;
-            let right = data.length - 1;
-            let pivot1, pivot2
-            while (left <= right) {
-                pivot1 = Math.floor(left + (right - left) / 3) || 0;
-                pivot2 = Math.floor(right - (left - right) / 3) || 0;
-                await timer(time);
-                changeBarColor(data[pivot1], traverseColor);
-                changeBarColor(data[pivot2], traverseColor);
-                if (data[pivot1] === target) {
-                    changeBarColor(data[pivot1], sortedColor);
-                    isFound = true;
-                    let text = target + " Found at position " + (pivot1 + 1);
-                    document.getElementById("foundNotice").innerHTML = text;
-                    await timer(time);
-                    return target;
-                }
-                if (data[pivot2] == target) {
-                    changeBarColor(data[pivot2], sortedColor);
-                    isFound = true;
-                    let text = target + " Found at position " + (pivot2 + 1);
-                    document.getElementById("foundNotice").innerHTML = text;
-                    await timer(time);
-                    return target;
-                }
-                if (target < data[pivot1]) {
-                    right = pivot1 - 1;
-                } else if (target > data[pivot2]) {
-                    left = pivot2 + 1;
-                } else {
-                    left = pivot1 - 1;
-                    right = pivot2 + 1;
-                }
-                await timer(time);
-            }
-            if (!isFound) {
-                document.getElementById("foundNotice").innerHTML =
-                    target + " doesn't exist.";
-            }
-            // after complete sorting complete making all the bar green 
-            isSorting = false;
-        }
-        search(this);
-    }
+
 };
 
 function startSearching() {
@@ -203,10 +153,7 @@ function startSearching() {
         const jumpSearchStarted = SearchAlgo.jumpSearch.bind(SearchAlgo);
         jumpSearchStarted();
     }
-    if (algo == "ternary-search") {
-        const ternarySearchStarted = SearchAlgo.ternarySearch.bind(SearchAlgo);
-        ternarySearchStarted();
-    }
+
 
 }
 
@@ -225,3 +172,7 @@ document.getElementById("random-data").addEventListener("click", function() {
     var data = randomData(maxElement, dataRange);
     createChart(data);
 });
+document.getElementById("reset").addEventListener("click", function() {
+    svg.remove();
+    createChart(data)
+})
