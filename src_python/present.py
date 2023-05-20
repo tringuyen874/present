@@ -1,8 +1,6 @@
 import math
-import random
 import time
-import matplotlib.pyplot as plt
-
+from dataService import readRandomData, readData
 # pos = low + [(x - arr[low]) * (high - low) / (arr[high] - arr[low])]
 # O(log(log(n)))
 
@@ -94,53 +92,6 @@ def jump_search(arr, target, low, high) :
 #         return ternary_search(arr, target, middle_2 + 1, right)
 #     return ternary_search(arr, target, middle_1 - 1, middle_2 + 1)
     
-def createData():
-    for i in range(1, 6):    
-        length = 200000000 * i # 200tr
-        data = [i for i in range(0, length, 100)]
-        
-        # Open file in write mode
-        with open("data.txt", "a") as f:
-            f.write("\n")
-            # Write data to file
-            for item in data:
-                f.write("%s" % item)
-                f.write(" ")
-
-        f.close()
-
-def createRandomData():
-    for i in range(1, 6):    
-        length = 200000000 * i
-        data = [random.randint(1, 10000000) for i in range(0, length, 100)]
-        
-        # Open file in write mode
-        with open("randomdata.txt", "a") as f:
-            f.write("\n")
-            # Write data to file
-            for item in data:
-                f.write("%s" % item)
-                f.write(" ")
-
-        f.close()
-
-def readData():
-    input = []
-    with open("data.txt", "r") as f:
-        for line in f:
-    # Read the contents of the file
-            input.append(line)
-    return input
-
-def readRandomData():
-    input = []
-    with open("randomdata.txt", "r") as f:
-        for line in f:
-    # Read the contents of the file
-            input.append(line)
-    
-    return input
-
 def testIS(input, step):
     inputSize = []
     timeComplexityT = []
@@ -199,7 +150,7 @@ def testJ(input, step):
         print(inputSize[i])
     return timeComplexityJ, inputSize
 
-def testT(input):
+def testBinary(input, step):
     inputSize = []
     timeComplexityJ = []
 
@@ -211,10 +162,10 @@ def testT(input):
         newData.sort()
         # x = 150000000 * (i + 1)
         length = len(newData)
-        x = newData[length//3]
+        x = newData[int(length * step)]
         inputSize.append(length)
 
-        result = interpolation_search(newData, x, 0, length - 1)
+        result = binay_search(newData, x)
         # print(result)
         if result == -1:
             print(f"Element {x} not found in the array.")
@@ -229,8 +180,8 @@ def testT(input):
     return timeComplexityJ, inputSize
 
 def main():
-    input = readRandomData()
-    # input = readData()
+    # input = readRandomData()
+    input = readData()
     del input[0]
     tempSize = 200000
     # print(a//19)
@@ -240,10 +191,13 @@ def main():
         step.append(i/tempSize)
     del step[-1]
     for i in step:
-        timeComplexityIS = testIS(input, i)[0]
-        timeComplexityJ, inputSize = testJ(input, i)
+        # timeComplexityIS = testIS(input, i)[0]
+        # timeComplexityJ, inputSize = testJ(input, i)
+        timeComplexityB, inputSize = testBinary(input, i)
         # makeStatistics(timeComplexityIS, timeComplexityJ, inputSize, i * 20)
-        makeStatisticsFromRandomData(timeComplexityIS, timeComplexityJ, inputSize, i * 20)
+        # makeStatisticsFromRandomData(timeComplexityIS, timeComplexityJ, inputSize, i * 20)
+        # makeStatsBinary(timeComplexityB, inputSize, i * 20)
+        makeStatsBinary2(timeComplexityB, inputSize, i * 20)
 
     # createData()
     # createRandomData()
@@ -268,6 +222,7 @@ def makeStatistics(timeIS, timeJ, size, index):
         f.write("\n")
     f.close() 
 
+
 def makeStatisticsFromRandomData(timeIS, timeJ, size, index):
     with open("statRandom.txt", 'a') as f:
         timeISArray = [str(elem) for elem in timeIS]
@@ -282,38 +237,28 @@ def makeStatisticsFromRandomData(timeIS, timeJ, size, index):
         f.write(" ".join(timeJArray))
         f.write("\n")
     f.close()
-
-def drawGraph(timeIS, timeJ, size):
-# Sample data for three lines
-    with open("stat.txt", 'a') as f:
-        timeISArray = [str(elem) for elem in timeIS]
-        timeJArray = [str(elem) for elem in timeJ]
+def makeStatsBinary(time, size, index):
+    with open("statsBinaryRandom.txt", 'a') as f:
+        timeB =  [str(elem) for elem in time]
         sizeArray = [str(elem) for elem in size]
+        f.write(f"\nIndex: {index}th\n")
         f.write("Input size:  \n")
         f.write(" ".join(sizeArray))
-        f.write("\nTime complexity IS: \n")
-        f.write(" ".join(timeISArray))
-        f.write("\nTime complexity J: \n")
-        f.write(" ".join(timeJArray))
+        f.write("\nTime complexity Binary: \n")
+        f.write(" ".join(timeB))
         f.write("\n")
-    f.close()        
-    fig, ax = plt.subplots()
-    # Plot the three lines
-    ax.plot(size, timeIS, label='IS')
-    ax.plot(size, timeJ, label='J')
-    # ax.plot(size, timeT, label='T')
-    # Add a legend to the plot
-    plt.legend()
+def makeStatsBinary2(time, size, index):
+    with open("statsBinary.txt", 'a') as f:
+        timeB =  [str(elem) for elem in time]
+        sizeArray = [str(elem) for elem in size]
+        f.write(f"\nIndex: {index}th\n")
+        f.write("Input size:  \n")
+        f.write(" ".join(sizeArray))
+        f.write("\nTime complexity Binary: \n")
+        f.write(" ".join(timeB))
+        f.write("\n")
 
-    # Add labels to the x and y axes
-    plt.xlabel('Input size')
-    plt.ylabel('Time complexity(seconds)')
 
-    # Set the title of the plot
-    plt.title('Relation between input size and time complexity  ')
-
-    # Display the plot
-    plt.show()
 
 main()
 
